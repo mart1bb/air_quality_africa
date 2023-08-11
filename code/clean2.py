@@ -37,26 +37,17 @@ def restructure(path):
 def restructure_parquet(path):
     data = pd.read_parquet(path)
 
-    df = pd.DataFrame()
     data['timestamp'] = pd.to_datetime(data['timestamp'],format='ISO8601').round('min')
-    
+
     data = data.loc[(data['value_type'] == 'P0') | 
                     (data['value_type'] == 'P1') | 
                     (data['value_type'] == 'P2') | 
                     (data['value_type'] == 'temperature') | 
                     (data['value_type'] == 'humidity')]
 
-    df = pd.pivot_table(data, values=['value'],columns=['value_type'], aggfunc=np.mean)
+    df = pd.pivot_table(data, values=['value'],index=['timestamp','location','lat','lon'],columns=['value_type'], aggfunc=np.sum)
     df = df.droplevel(0,axis=1).rename_axis(columns=None)
-
-    # data.drop_duplicates(subset='timestamp',inplace=True)
-    # data.set_index('timestamp',inplace=True)
-    
-    df['lat'] = data[['lat']]
-    df['lon'] = data[['lon']]
-    df['timestamp'] = data[['timestamp']]
-
-    # df.reset_index(inplace=True)
+    df.reset_index(inplace=True)
 
     return df
 
