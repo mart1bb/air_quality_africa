@@ -22,12 +22,15 @@ for loc in locations:
     location_indicator.loc[loc,'quality'] = (abs(np.mean(values)-mean_temperature_nairobi)/mean_temperature_nairobi)*100
     location_indicator.loc[loc,'quantity'] = (len(values)/len(df.temperature))*100
 
-good_locations = location_indicator.loc[location_indicator['quality'] < 25].index
+# good_locations = location_indicator.loc[location_indicator['quality'] < 25].index
 
-df_2 = df.loc[df['location'].isin(good_locations)]
+# df_2 = df.loc[df['location'].isin(good_locations)]
+# df_2.to_parquet('./coherent/location_cut_incoherent_temp.parquet')
 
 
-print((len(df_2)/len(df))*100)
+print(location_indicator)
+
+# print((len(df_2)/len(df))*100)
 
 
 
